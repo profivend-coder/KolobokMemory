@@ -3,10 +3,21 @@
 Selective long-term memory engine for AI agents.
 
 A fail-closed, bounded memory write/read pipeline over the OpenViking memory
-store. KolobokMemory turns raw conversation turns into durable, retrieveable
+store. KolobokMemory turns raw conversation turns into durable, retrievable
 memories — and only writes what is genuinely worth remembering. It never
 silently overwrites, never leaks secrets, and never lets test/resource data
 become production memory.
+
+## What this is (and is not)
+
+> **Current scope.** KolobokMemory is a **standalone memory engine**. Its
+> storage adapter is **OpenViking**, and its runtime host is **OpenClaw** (as a
+> plugin exposing recall + write pipelines).
+>
+> It is **not** the built-in memory of `/root/Kolobok/platform`. It is not wired
+> into any Kolobok core, and no direct Kolobok adapter exists yet. A future
+> adapter for Kolobok Core would be a separate port and a later version — not a
+> rewrite of this project's history.
 
 ## Architecture
 
@@ -17,13 +28,13 @@ Conversation
     ↓
 Candidate Extraction      (structured candidates from sanitised text)
     ↓
-Secret / Safety Filter    (deterministic; secrets are redacted, never stored)
+Secret Filter             (deterministic; secrets are redacted, never stored)
     ↓
 Write Gate                (KEEP / SKIP per candidate, reason-coded)
     ↓
-Dedup / Lookup            (SAME / NOVEL / AMBIGUOUS / NOT_FOUND against store)
+Dedup / Existing Memory Lookup   (SAME / NOVEL / AMBIGUOUS / NOT_FOUND)
     ↓
-Trust / Conflict          (confidence + conflict resolution, no silent resolution)
+Trust / Conflict Resolution      (confidence + conflict, no silent resolution)
     ↓
 WRITE_NEW / UPDATE / SUPERSEDE / SKIP
     ↓
@@ -58,7 +69,7 @@ Bounded Context Injection (L0 / L1 / L2, per-level char & item caps)
 ## Layout
 
 ```
-index.js                     production read-path + hook registration
+index.js                     read-path pipeline + hook registration
 openclaw.plugin.json         plugin manifest + config schema
 package.json                 package metadata
 write/
@@ -78,6 +89,10 @@ write/
   production.js              production capability + policy gate + backup/rollback
   trace.js                   serialisable trace entries
 test/                        unit + integration + smoke tests
+docs/
+  ARCHITECTURE.md            read/write path, decisions, storage & integration boundaries
+  SECURITY.md                secret filtering, fail-closed, namespaces, rollback
+  TESTING.md                 unit, adversarial, shadow, canary, regression
 ```
 
 ## Status
@@ -88,9 +103,12 @@ runs end-to-end in trace-only mode; production memory mutation is gated behind
 and only `WRITE_NEW` is permitted under canary). UPDATE / SUPERSEDE production
 paths are next in the rollout sequence.
 
+No release tag is published until the memory-write rollout reaches its final
+production PASS.
+
 ## Development
 
 ```bash
-npm install        # not required for the default (no external deps) path
-node --test test/  # run the test suite
+node --check write/*.js index.js   # syntax check
+node --test test/                  # run the test suite
 ```

@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Secrets / env (NEVER commit)
+.env
+.env.*
+*.pem
+*.key
+credentials/
+secrets/
+
+# Logs & coverage
+*.log
+coverage/
+.nyc_output/
+
+# Runtime / generated state (NEVER commit)
+runtime/
+data/
+traces/
+backups/
+tmp/
+temp/
+*.bak
+*.orig
+*.local
+*.swp
+*~
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

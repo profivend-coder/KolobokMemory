@@ -1,0 +1,60 @@
+{
+  "id": "selective-memory",
+  "name": "Selective Memory",
+  "description": "Jev-gated (NONE/L0/L1/L2) selective memory injection over OpenViking — fail-open, bounded.",
+  "version": "0.3.0",
+  "activation": {
+    "onStartup": true,
+    "onCapabilities": ["hook"]
+  },
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "enabled": { "type": "boolean" },
+      "jevModel": { "type": "string" },
+      "jevApiKey": { "type": "string" },
+      "jevApiKeyFile": { "type": "string" },
+      "openvikingBaseUrl": { "type": "string" },
+      "openvikingApiKey": { "type": "string" },
+      "openvikingTargetUri": { "type": "string" },
+      "recallLimit": { "type": "number" },
+      "recallScoreThreshold": { "type": "number" },
+      "maxInjectedCharsL0": { "type": "number" },
+      "maxInjectedCharsL1": { "type": "number" },
+      "maxInjectedCharsL2": { "type": "number" },
+      "l1PerItemCap": { "type": "number" },
+      "l2PerItemCap": { "type": "number" },
+      "l1MaxItems": { "type": "number" },
+      "l2MaxItems": { "type": "number" },
+      "summaryConcurrency": { "type": "number" },
+      "summaryFallbackChars": { "type": "number" },
+      "maxQueryMessages": { "type": "number" },
+      "maxQueryChars": { "type": "number" },
+      "timeoutMs": { "type": "number" },
+      "debugLog": { "type": "boolean" }
+    }
+  },
+  "uiHints": {
+    "jevApiKey": { "label": "Jev API Key", "sensitive": true, "placeholder": "sk-or-v1-... or ${ENV_VAR}" },
+    "jevApiKeyFile": { "label": "Jev API Key File", "placeholder": "~/.openclaw/credentials/openrouter-jev.key", "advanced": true },
+    "openvikingBaseUrl": { "label": "OpenViking Base URL", "placeholder": "http://127.0.0.1:1933" },
+    "openvikingApiKey": { "label": "OpenViking API Key", "sensitive": true, "placeholder": "local-dev" },
+    "openvikingTargetUri": { "label": "Search Target URI", "placeholder": "viking://~/memories", "advanced": true },
+    "recallLimit": { "label": "Recall Limit", "placeholder": "6", "advanced": true },
+    "recallScoreThreshold": { "label": "Recall Score Threshold", "placeholder": "0.15", "advanced": true },
+    "maxInjectedCharsL0": { "label": "Max Injected Chars (L0)", "placeholder": "400", "advanced": true },
+    "maxInjectedCharsL1": { "label": "Max Injected Chars (L1)", "placeholder": "1000", "advanced": true },
+    "maxInjectedCharsL2": { "label": "Max Injected Chars (L2)", "placeholder": "3000", "advanced": true },
+    "l1PerItemCap": { "label": "L1 Per-Item Cap", "placeholder": "300", "advanced": true },
+    "l2PerItemCap": { "label": "L2 Per-Item Cap", "placeholder": "900", "advanced": true },
+    "l1MaxItems": { "label": "L1 Max Items", "placeholder": "3", "advanced": true },
+    "l2MaxItems": { "label": "L2 Max Items", "placeholder": "3", "advanced": true },
+    "summaryConcurrency": { "label": "Summary Fetch Concurrency", "placeholder": "3", "advanced": true },
+    "summaryFallbackChars": { "label": "Summary Fallback Chars", "placeholder": "250", "advanced": true },
+    "maxQueryMessages": { "label": "Max Query Messages", "placeholder": "3", "advanced": true },
+    "maxQueryChars": { "label": "Max Query Chars", "placeholder": "1000", "advanced": true },
+    "timeoutMs": { "label": "Request Timeout (ms)", "placeholder": "5000", "advanced": true },
+    "debugLog": { "label": "Debug Log", "advanced": true }
+  }
+}
